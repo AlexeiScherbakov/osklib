@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osklib", "Osklib\Osklib.csproj", "{F4F49A76-A75D-45A5-AA30-03C09052634A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E15DD87A-CF9A-4292-B82F-D13F0959C3AC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTester", "ConsoleTester\ConsoleTester.csproj", "{9752EAF3-4855-4E2D-889B-961AF3CE1F72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4F49A76-A75D-45A5-AA30-03C09052634A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4F49A76-A75D-45A5-AA30-03C09052634A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4F49A76-A75D-45A5-AA30-03C09052634A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4F49A76-A75D-45A5-AA30-03C09052634A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9752EAF3-4855-4E2D-889B-961AF3CE1F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9752EAF3-4855-4E2D-889B-961AF3CE1F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9752EAF3-4855-4E2D-889B-961AF3CE1F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9752EAF3-4855-4E2D-889B-961AF3CE1F72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
