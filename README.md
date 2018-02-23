@@ -11,3 +11,7 @@ OnScreenKeyboard.Show() - show On Screen Keyboard
 OnScreenKeyboard.Close() - close On Screen Keyboard
 
 https://www.nuget.org/packages/Osklib
+
+
+# Osklib.Wpf
+WPF helper
