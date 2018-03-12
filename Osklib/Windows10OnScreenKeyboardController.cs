@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.ComponentModel;
+
 using Osklib.Interop;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -29,8 +30,7 @@ namespace Osklib
 
 		public override bool IsOpened()
 		{
-			
-			return false;
+			return NativeMethods.IsTabTipProcessPresent() && NativeMethods.IsWin10OnScreenKeyboardVisible();
 		}
 
 		private static void StartTabTip()
