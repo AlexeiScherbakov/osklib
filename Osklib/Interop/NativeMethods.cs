@@ -1,9 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Osklib.Interop
 {
-    internal static class NativeMethods
+	internal static class NativeMethods
     {
 		#region [user32]
 		[DllImport( "user32.dll",EntryPoint = "FindWindow" )]
@@ -54,7 +55,7 @@ namespace Osklib.Interop
 
 		internal static bool IsTabTipProcessPresent()
 		{
-			IntPtr handle = NativeMethods.FindWindow("IPTIP_Main_Window", "");
+			IntPtr handle = NativeMethods.FindWindow(TabTipWindowClassName, "");
 			return NativeMethods.IsValidHandle(handle);
 		}
 
@@ -94,19 +95,25 @@ namespace Osklib.Interop
 
 		internal static bool IsWin10OnScreenKeyboardVisible()
 		{
-			IntPtr handle = NativeMethods.FindWindow("IPTIP_Main_Window", "");
+			IntPtr handle = NativeMethods.FindWindow(TabTipWindowClassName, "");
 			if (!IsValidHandle(handle))
 			{
 				return false;
 			}
 
-			var isVisible = NativeMethods.IsWindowVisibleByHandle(handle);
+			var isVisible = IsWindowVisibleByHandle(handle);
 			if (isVisible.HasValue)
 			{
 				return isVisible.Value;
 			}
 
 			// hard way
+			var textInputHandle = FindTextInputWindow();
+			return IsValidHandle(textInputHandle);
+		}
+
+		internal static IntPtr FindTextInputWindow()
+		{
 			// enumerating Windows Store Container windows and try to find Window with caption 'Microsoft Text Input Application'
 			IntPtr lastProbed = IntPtr.Zero;
 			do
@@ -115,12 +122,14 @@ namespace Osklib.Interop
 				if (IsValidHandle(lastProbed))
 				{
 					var textInput = FindWindowEx(lastProbed, IntPtr.Zero, CoreWindowClassName, TextInputApplicationCaption);
-					return IsValidHandle(textInput);
+					return textInput;
 				}
 			} while (IsValidHandle(lastProbed));
 
-			return false;
+			return IntPtr.Zero;
 		}
+
+		private const string TabTipWindowClassName = "IPTIP_Main_Window";
 
 		private const string ApplicationFrameHostClassName = "ApplicationFrameWindow";
 

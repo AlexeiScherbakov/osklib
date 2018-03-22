@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,18 @@ namespace ConsoleTester
 	{
 		static void Main( string[] args )
 		{
+			Osklib.OnScreenKeyboardWatcher watcher = new Osklib.OnScreenKeyboardWatcher();
+
+			watcher.KeyboardOpened += delegate
+			{
+				Console.WriteLine("event fired - keyboard opened");
+			};
+			watcher.KeyboardClosed += delegate
+			{
+				Console.WriteLine("event fired - keyboard closed");
+			};
+
+
 			bool isOpened = Osklib.OnScreenKeyboard.IsOpened();
 			Console.WriteLine( "Was opened {0}", isOpened );
 			Osklib.OnScreenKeyboard.Show();
