@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net40;net45;net47</TargetFrameworks>
-		<Version>1.3.0</Version>
+  <PropertyGroup>
+    <TargetFrameworks>net40;net45;net47</TargetFrameworks>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -13,21 +12,27 @@
 		<DelaySign>False</DelaySign>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IncludeSource>true</IncludeSource>
-	</PropertyGroup>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<None Include="..\key.snk" Link="key.snk" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\key.snk" Link="key.snk" />
+  </ItemGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="..\Osklib\Osklib.csproj" />
 	</ItemGroup>
 
+
 	<ItemGroup>
-		<Reference Include="PresentationCore" />
-		<Reference Include="PresentationFramework" />
-		<Reference Include="System.Xaml" />
-		<Reference Include="WindowsBase" />
+	  <Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Compile Update="WinFormsKeyboardWatcher.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

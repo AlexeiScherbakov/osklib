@@ -1,7 +1,4 @@
- using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,9 +7,16 @@ namespace Osklib.Wpf
 {
 	public static class OnScreenKeyboardSettings
 	{
-		// There are not much controls which need on-screen keyboard
-		private static int _enabledBitField = 0;
-		private static int _registeredHandlers = 0;
+		// There are not much controls which need on-screen keyboard <32
+
+		/// <summary>
+		/// Enabled global handlers bitfield
+		/// </summary>
+		private static StandardControlFlag _enabledBitField =StandardControlFlag.None;
+		/// <summary>
+		/// Registered EventManager Class Handlers bitfield
+		/// </summary>
+		private static StandardControlFlag _registeredHandlers = 0;
 		private static EventHandler<TouchEventArgs> _touchHandler;
 
 		private static Type[] _controlTypes =
@@ -24,11 +28,11 @@ namespace Osklib.Wpf
 
 
 		private static void RegisterTouchHandlerForClass<Type>()
-			where Type:UIElement
+			where Type : UIElement
 		{
 			if (_touchHandler == null)
 			{
-				_touchHandler= new EventHandler<TouchEventArgs>(TouchUpEventHandler);
+				_touchHandler = new EventHandler<TouchEventArgs>(TouchUpEventHandler);
 			}
 			EventManager.RegisterClassHandler(typeof(Type), UIElement.TouchUpEvent, _touchHandler);
 		}
@@ -39,15 +43,15 @@ namespace Osklib.Wpf
 
 		public static bool EnableForTextBoxes
 		{
-			get { return (_enabledBitField & TextBoxFlag) != 0; }
+			get { return _enabledBitField.HasFlag(StandardControlFlag.TextBox); }
 			set
 			{
-				if (((_enabledBitField & TextBoxFlag) !=0) == value)
+				if (_enabledBitField.HasFlag(StandardControlFlag.TextBox) == value)
 				{
 					return;
 				}
-				_enabledBitField ^= TextBoxFlag;
-				if (((_registeredHandlers & TextBoxFlag) ==0)&&value)
+				_enabledBitField ^= StandardControlFlag.TextBox;
+				if ((!_registeredHandlers.HasFlag(StandardControlFlag.TextBox)) && value)
 				{
 					RegisterTouchHandlerForClass<TextBox>();
 				}
@@ -56,15 +60,15 @@ namespace Osklib.Wpf
 
 		public static bool EnableForPasswordBoxes
 		{
-			get { return (_enabledBitField & PasswordBoxFlag) != 0; }
+			get { return _enabledBitField.HasFlag(StandardControlFlag.PasswordBox); }
 			set
 			{
-				if (((_enabledBitField & PasswordBoxFlag) != 0) == value)
+				if (_enabledBitField.HasFlag(StandardControlFlag.PasswordBox) == value)
 				{
 					return;
 				}
-				_enabledBitField ^= PasswordBoxFlag;
-				if (((_registeredHandlers & PasswordBoxFlag) == 0) && value)
+				_enabledBitField ^= StandardControlFlag.PasswordBox;
+				if ((!_registeredHandlers.HasFlag(StandardControlFlag.PasswordBox)) && value)
 				{
 					RegisterTouchHandlerForClass<PasswordBox>();
 				}
@@ -73,15 +77,15 @@ namespace Osklib.Wpf
 
 		public static bool EnableForRichTextBoxes
 		{
-			get { return (_enabledBitField & RichTextBoxFlag) != 0; }
+			get { return _enabledBitField.HasFlag(StandardControlFlag.RichTextBox); }
 			set
 			{
-				if (((_enabledBitField & RichTextBoxFlag) != 0) == value)
+				if (_enabledBitField.HasFlag(StandardControlFlag.RichTextBox) == value)
 				{
 					return;
 				}
-				_enabledBitField ^= RichTextBoxFlag;
-				if (((_registeredHandlers & RichTextBoxFlag) == 0) && value)
+				_enabledBitField ^= StandardControlFlag.RichTextBox;
+				if ((!_registeredHandlers.HasFlag(StandardControlFlag.RichTextBox)) && value)
 				{
 					RegisterTouchHandlerForClass<RichTextBox>();
 				}
@@ -105,7 +109,7 @@ namespace Osklib.Wpf
 
 			for (int i = 0; i < _controlTypes.Length; i++)
 			{
-				int mask = 1 << i;
+				StandardControlFlag mask = (StandardControlFlag)(1 << i);
 				if ((_enabledBitField & mask) != 0)
 				{
 					if (_controlTypes[i].IsAssignableFrom(type))
@@ -152,7 +156,7 @@ namespace Osklib.Wpf
 
 		private static void Element_TouchUp(object sender, TouchEventArgs e)
 		{
-			Osklib.OnScreenKeyboard.Show();
+			OnScreenKeyboard.Show();
 		}
 
 		public static void SetIsEnabled(UIElement element, bool value)

@@ -20,11 +20,48 @@ namespace WpfSample
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
+		: Window
 	{
+		private DispatcherOnScreenKeyboardWatcher _keyBoardWatcher;
+
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			_keyBoardWatcher = new DispatcherOnScreenKeyboardWatcher(this.Dispatcher);
+
+
+			keyboardStateTextBox.Text = GetKeyboardState(_keyBoardWatcher.State);
+
+			_keyBoardWatcher.KeyboardOpened += _keyBoardWatcher_KeyboardOpened;
+			_keyBoardWatcher.KeyboardClosed += _keyBoardWatcher_KeyboardClosed;
+		}
+
+		private string GetKeyboardState(bool? state)
+		{
+			if (state.HasValue)
+			{
+				if (state.Value)
+				{
+					return "On Screen Keyboard is opened";
+				}
+				else
+				{
+					return "On Screen Keyboard is closed";
+				}
+			}
+			return "On Screen Keyboard State is unknown";
+		}
+
+		private void _keyBoardWatcher_KeyboardOpened(object sender, EventArgs e)
+		{
+			keyboardStateTextBox.Text = "On Screen Keyboard is opened";
+		}
+
+		private void _keyBoardWatcher_KeyboardClosed(object sender, EventArgs e)
+		{
+			keyboardStateTextBox.Text = "On Screen Keyboard is closed";
 		}
 
 		private void ToggleButton_Checked(object sender, RoutedEventArgs e)

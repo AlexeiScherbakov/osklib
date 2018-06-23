@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
-using System.ComponentModel;
-
-using Osklib.Interop;
 using System.Runtime.InteropServices;
 using System.Threading;
+
+using Osklib.Interop;
 
 namespace Osklib
 {
@@ -15,6 +11,13 @@ namespace Osklib
 	internal sealed class Windows10OnScreenKeyboardController
 		: OnScreenKeyboardController
 	{
+		private static readonly Type TipInvocationType = null;
+
+		static Windows10OnScreenKeyboardController()
+		{
+			TipInvocationType=Type.GetTypeFromCLSID(Guid.Parse("4ce576fa-83dc-4F88-951c-9d0782b4e376"));
+		}
+
 		public override bool Close()
 		{
 			// find it
@@ -30,7 +33,7 @@ namespace Osklib
 
 		public override bool IsOpened()
 		{
-			return NativeMethods.IsTabTipProcessPresent() && NativeMethods.IsWin10OnScreenKeyboardVisible();
+			return NativeMethods.IsWin10OnScreenKeyboardVisible();
 		}
 
 		private static void StartTabTip()
@@ -45,10 +48,20 @@ namespace Osklib
 
 		private static void ShowByCom()
 		{
-			var type = Type.GetTypeFromCLSID(Guid.Parse("4ce576fa-83dc-4F88-951c-9d0782b4e376"));
-			var instance = (ITipInvocation)Activator.CreateInstance(type);
-			instance.Toggle(NativeMethods.GetDesktopWindow());
-			Marshal.ReleaseComObject(instance);
+			ITipInvocation instance = null;
+			try
+			{
+				instance = (ITipInvocation)Activator.CreateInstance(TipInvocationType);
+				var window = NativeMethods.GetDesktopWindow();
+				instance.Toggle(NativeMethods.GetDesktopWindow());
+			}
+			finally
+			{
+				if (!ReferenceEquals(instance, null))
+				{
+					Marshal.ReleaseComObject(instance);
+				}
+			}
 		}
 
 		public override void Show()

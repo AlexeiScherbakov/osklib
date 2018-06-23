@@ -6,6 +6,12 @@ indent_style = tab
 [*.cs]
 charset = utf-8
 indent_style = tab
+
+dotnet_sort_system_directives_first=true
+dotnet_separate_import_directive_groups=true
+dotnet_style_predefined_type_for_locals_parameters_members = true:error
+dotnet_style_predefined_type_for_member_access = true:error
+
 # style
 csharp_style_conditional_delegate_call = false:error
 csharp_style_expression_bodied_accessors = false:error

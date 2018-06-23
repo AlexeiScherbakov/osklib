@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.ComponentModel;
+using System;
 
 using Osklib.Interop;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace Osklib
 {
@@ -16,23 +9,32 @@ namespace Osklib
 
 		private static readonly OnScreenKeyboardController _oskController;
 
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <remarks>
+		/// Windows 10 Builds
+		/// 14393 - 1607 (Anniversary Update)
+		/// 15063 - 1703 (Creators Update)
+		/// 16299 - 1709 (Fall Creators Update)
+		/// </remarks>
 		static OnScreenKeyboard()
 		{
-			var version = Environment.OSVersion.Version;
-			switch ( version.Major )
+			Version version;
+			if (NativeMethods.GetOsVersion(out version))
 			{
-				case 6:
-					switch ( version.Minor )
-					{
-						case 2:
-							// Windows 10 (ok)
-							_oskController = new Windows10OnScreenKeyboardController();
-							break;
-					}
-					break;
-				default:
-					break;
+				switch (version.Major)
+				{
+					case 10:
+						// Windows 10 (ok)
+						_oskController = new Windows10OnScreenKeyboardController();
+						break;
+					default:
+						break;
+				}
 			}
+			
 			if (null == _oskController)
 			{
 				_oskController = new UnsupportedOsOnScreenKeyboardController();

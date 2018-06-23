@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net40;net45;net461;net47</TargetFrameworks>
+    <TargetFrameworks>net40;net45;net47;net471</TargetFrameworks>
     <Description>Library for controlling Windows 10 On Screen Keyboard</Description>
     <PackageTags>osk, OnScreenKeyboard, TabTip</PackageTags>
     <Authors>Alexei Shcherbakov</Authors>
@@ -9,12 +9,21 @@
     <SignAssembly>True</SignAssembly>
     <DelaySign>False</DelaySign>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
     <Company />
     <PackageProjectUrl>https://github.com/AlexeiScherbakov/osklib</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AlexeiScherbakov/osklib</RepositoryUrl>
+		<LangVersion>latest</LangVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IncludeSource>true</IncludeSource>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

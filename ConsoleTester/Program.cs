@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+
+using Osklib;
 
 namespace ConsoleTester
 {
@@ -11,7 +9,7 @@ namespace ConsoleTester
 	{
 		static void Main( string[] args )
 		{
-			Osklib.OnScreenKeyboardWatcher watcher = new Osklib.OnScreenKeyboardWatcher();
+			OnScreenKeyboardWatcher watcher = new OnScreenKeyboardWatcher();
 
 			watcher.KeyboardOpened += delegate
 			{
@@ -23,13 +21,13 @@ namespace ConsoleTester
 			};
 
 
-			bool isOpened = Osklib.OnScreenKeyboard.IsOpened();
+			bool isOpened = OnScreenKeyboard.IsOpened();
 			Console.WriteLine( "Was opened {0}", isOpened );
-			Osklib.OnScreenKeyboard.Show();
+			OnScreenKeyboard.Show();
 			Thread.Sleep( 5000 );
-			isOpened = Osklib.OnScreenKeyboard.IsOpened();
+			isOpened = OnScreenKeyboard.IsOpened();
 			Console.WriteLine( "Now is opened {0}", isOpened );
-			bool closed = Osklib.OnScreenKeyboard.Close();
+			bool closed = OnScreenKeyboard.Close();
 			Console.WriteLine( "Was closed {0}", closed );
 
 			Console.ReadLine();
