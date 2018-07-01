@@ -14,16 +14,16 @@ namespace Osklib.WinForms
 
 		#region ctor & dtor
 		public WinFormsKeyboardWatcher()
-        {
-            InitializeComponent();
-        }
+		{
+			InitializeComponent();
+		}
 
-        public WinFormsKeyboardWatcher(IContainer container)
-        {
-            container.Add(this);
+		public WinFormsKeyboardWatcher(IContainer container)
+		{
+			container.Add(this);
 
-            InitializeComponent();
-        }
+			InitializeComponent();
+		}
 
 		protected override void Dispose(bool disposing)
 		{
@@ -34,32 +34,12 @@ namespace Osklib.WinForms
 			}
 			base.Dispose(disposing);
 		}
-		#endregion
 
 		private void InitializeComponent()
 		{
 			_watcher = new OnScreenKeyboardWatcher(this);
 		}
-
-		private void OnKeyboardOpened()
-		{
-			var evnt = KeyboardOpened;
-			if (evnt != null)
-			{
-				evnt(this, EventArgs.Empty);
-			}
-		}
-
-		public event EventHandler KeyboardOpened;
-
-		private void OnKeyboardClosed()
-		{
-			var evnt = KeyboardClosed;
-			if (evnt != null)
-			{
-				evnt(this, EventArgs.Empty);
-			}
-		}
+		#endregion
 
 		public bool? State
 		{
@@ -71,7 +51,56 @@ namespace Osklib.WinForms
 			get { return _watcher.OpenedSince; }
 		}
 
+		public OnScreenKeyboardDisplayMode DisplayMode
+		{
+			get { return _watcher.DisplayMode; }
+		}
+
+		public OnScreenKeyboardWatcherEvents TrackedEvents
+		{
+			get { return _watcher.TrackedEvents; }
+		}
+
+		public Rect Location
+		{
+			get { return _watcher.Location; }
+		}
+
+		#region events
+
+		private void OnParametersChanged()
+		{
+			var evnt = ParametersChanged;
+			if (evnt != null)
+			{
+				evnt(this, EventArgs.Empty);
+			}
+		}
+
+		public event EventHandler ParametersChanged;
+
+		private void OnKeyboardOpened()
+		{
+			var evnt = KeyboardOpened;
+			if (evnt != null)
+			{
+				evnt(this, EventArgs.Empty);
+			}
+		}
+		public event EventHandler KeyboardOpened;
+
+
+		private void OnKeyboardClosed()
+		{
+			var evnt = KeyboardClosed;
+			if (evnt != null)
+			{
+				evnt(this, EventArgs.Empty);
+			}
+		}
+
 		public event EventHandler KeyboardClosed;
+		#endregion
 
 		private sealed class OnScreenKeyboardWatcher
 			: BaseOnScreenKeyboardWatcher
@@ -97,7 +126,7 @@ namespace Osklib.WinForms
 					timer.Stop();
 					timer.Dispose();
 				}
-				
+
 			}
 
 			private void TimerTick(object sender, System.EventArgs e)
@@ -114,7 +143,10 @@ namespace Osklib.WinForms
 				_watcher.OnKeyboardClosed();
 			}
 
-			
+			protected override void OnParametersChanged()
+			{
+				_watcher.OnParametersChanged();
+			}
 		}
 	}
 }

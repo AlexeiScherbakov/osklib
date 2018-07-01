@@ -23,6 +23,16 @@ namespace Osklib
 			}
 		}
 
+		protected override void OnParametersChanged()
+		{
+			var evnt = ParametersChanged;
+			if (evnt != null)
+			{
+				evnt(this, EventArgs.Empty);
+			}
+		}
+
+		public event EventHandler ParametersChanged;
 		public event EventHandler KeyboardOpened;
 		public event EventHandler KeyboardClosed;
 	}

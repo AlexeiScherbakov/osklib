@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Osklib;
 using Osklib.Wpf;
 
 namespace WpfSample
@@ -30,38 +31,38 @@ namespace WpfSample
 			InitializeComponent();
 
 			_keyBoardWatcher = new DispatcherOnScreenKeyboardWatcher(this.Dispatcher);
+			_keyBoardWatcher.TrackedEvents = OnScreenKeyboardWatcherEvents.State | OnScreenKeyboardWatcherEvents.Location;
 
+			DetectParameters();
 
-			keyboardStateTextBox.Text = GetKeyboardState(_keyBoardWatcher.State);
-
+			_keyBoardWatcher.ParametersChanged += _keyBoardWatcher_ParametersChanged;
 			_keyBoardWatcher.KeyboardOpened += _keyBoardWatcher_KeyboardOpened;
 			_keyBoardWatcher.KeyboardClosed += _keyBoardWatcher_KeyboardClosed;
 		}
 
-		private string GetKeyboardState(bool? state)
+		private void _keyBoardWatcher_ParametersChanged(object sender, EventArgs e)
 		{
-			if (state.HasValue)
-			{
-				if (state.Value)
-				{
-					return "On Screen Keyboard is opened";
-				}
-				else
-				{
-					return "On Screen Keyboard is closed";
-				}
-			}
-			return "On Screen Keyboard State is unknown";
+			DetectParameters();
 		}
+
+		private void DetectParameters()
+		{
+			Osklib.Rect rect = _keyBoardWatcher.Location;
+			keyboardLocationTextBox.Text = string.Format("Keyboard position is ({0},{1}-{2},{3}), keyboard display mode is {4}, Is opened - {5}",
+					rect.Left, rect.Top, rect.Right, rect.Bottom,
+					_keyBoardWatcher.DisplayMode,
+					_keyBoardWatcher.State);
+		}
+
 
 		private void _keyBoardWatcher_KeyboardOpened(object sender, EventArgs e)
 		{
-			keyboardStateTextBox.Text = "On Screen Keyboard is opened";
+			keyboardStateTextBox.Text = "Event: On Screen Keyboard is opened";
 		}
 
 		private void _keyBoardWatcher_KeyboardClosed(object sender, EventArgs e)
 		{
-			keyboardStateTextBox.Text = "On Screen Keyboard is closed";
+			keyboardStateTextBox.Text = "Event: On Screen Keyboard is closed";
 		}
 
 		private void ToggleButton_Checked(object sender, RoutedEventArgs e)

@@ -1,7 +1,3 @@
-#if NET471
-#define USE_REF_STRUCT
-#endif
-
 #if !NET40
 #define INLINING
 #endif
@@ -20,20 +16,23 @@ namespace Osklib.Interop
 		#region Fuctions imports
 
 		#region [user32]
-		[DllImport( "user32.dll",EntryPoint = "FindWindow" )]
+
+		private const string User32Dll = "user32.dll";
+
+		[DllImport(User32Dll, EntryPoint = "FindWindow" )]
 		internal static extern IntPtr FindWindow( string lpClassName, string lpWindowName );
 
-		[DllImport("user32.dll", EntryPoint = "FindWindowEx")]
+		[DllImport(User32Dll, EntryPoint = "FindWindowEx")]
 		internal static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
 
-		[DllImport( "user32.dll", EntryPoint = "SendMessage" )]
+		[DllImport(User32Dll, EntryPoint = "SendMessage" )]
 		internal static extern int SendMessage( IntPtr hWnd, uint Msg, int wParam, int lParam );
 
-		[DllImport( "user32.dll",EntryPoint = "GetDesktopWindow", SetLastError = false )]
+		[DllImport(User32Dll, EntryPoint = "GetDesktopWindow", SetLastError = false )]
 		internal static extern IntPtr GetDesktopWindow();
 
-		[DllImport( "user32.dll", EntryPoint = "GetWindowLong" )]
+		[DllImport(User32Dll, EntryPoint = "GetWindowLong" )]
 		internal static extern int GetWindowLong( IntPtr hWnd, int nIndex );
 		#endregion
 
@@ -45,6 +44,7 @@ namespace Osklib.Interop
 		#region [ntdll]
 		[DllImport("ntdll.dll", EntryPoint = "RtlGetVersion")]
 		internal static extern int RtlGetVersion(ref RTL_OSVERSIONINFOEXW osVersionInfo);
+
 		#endregion
 
 		#endregion
@@ -62,35 +62,16 @@ namespace Osklib.Interop
 
 		#region strings
 		private const string TabTipWindowClassName = "IPTIP_Main_Window";
+		/// <summary>
+		/// Windows Store Container Class Name
+		/// </summary>
 		private const string ApplicationFrameHostClassName = "ApplicationFrameWindow";
 		private const string CoreWindowClassName = "Windows.UI.Core.CoreWindow";
+		/// <summary>
+		/// Windows 10 On Screen Keyboard Caption
+		/// </summary>
 		private const string TextInputApplicationCaption = "Microsoft Text Input Application";
-		#endregion
 
-		#endregion
-
-		#region Types
-
-		#region struct RTL_OSVERSIONINFOEXW
-		[StructLayout(LayoutKind.Sequential)]
-		internal unsafe
-#if USE_REF_STRUCT
-			ref
-#endif
-			struct RTL_OSVERSIONINFOEXW
-		{
-			public uint dwOSVersionInfoSize;
-			public int dwMajorVersion;
-			public int dwMinorVersion;
-			public int dwBuildNumber;
-			public uint dwPlatformId;
-			public fixed char szCSDVersion[128];
-			public ushort wServicePackMajor;
-			public ushort wServicePackMinor;
-			public ushort wSuiteMask;
-			public byte wProductType;
-			public byte wReserved;
-		}
 		#endregion
 
 		#endregion

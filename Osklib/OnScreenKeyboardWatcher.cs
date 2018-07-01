@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 using Osklib.Interop;
@@ -22,7 +23,6 @@ namespace Osklib
 			CheckKeyboard();
 			_endEvent = new ManualResetEventSlim(false);
 			_watcherThread = new Thread(WatcherThreadFunc);
-			// below normal priority background thread
 			_watcherThread.Priority = threadPriority;
 			_watcherThread.IsBackground = true;
 			_watcherThread.Start();

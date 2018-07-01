@@ -12,6 +12,9 @@
 		<DelaySign>False</DelaySign>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IncludeSource>true</IncludeSource>
+		<Version>1.4.0</Version>
+		<Authors>Alexei Shcherbakov</Authors>
+		<Company />
   </PropertyGroup>
 
   <ItemGroup>

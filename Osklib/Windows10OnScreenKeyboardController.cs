@@ -11,11 +11,9 @@ namespace Osklib
 	internal sealed class Windows10OnScreenKeyboardController
 		: OnScreenKeyboardController
 	{
-		private static readonly Type TipInvocationType = null;
-
 		static Windows10OnScreenKeyboardController()
 		{
-			TipInvocationType=Type.GetTypeFromCLSID(Guid.Parse("4ce576fa-83dc-4F88-951c-9d0782b4e376"));
+			
 		}
 
 		public override bool Close()
@@ -51,7 +49,7 @@ namespace Osklib
 			ITipInvocation instance = null;
 			try
 			{
-				instance = (ITipInvocation)Activator.CreateInstance(TipInvocationType);
+				instance = (ITipInvocation)Activator.CreateInstance(ComTypes.TipInvocationType);
 				var window = NativeMethods.GetDesktopWindow();
 				instance.Toggle(NativeMethods.GetDesktopWindow());
 			}
