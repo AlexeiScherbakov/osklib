@@ -1,16 +1,5 @@
-#if NET471
-#define USE_REF_STRUCT
-#endif
-
-#if !NET40
-#define INLINING
-#endif
-
 using System.Runtime.InteropServices;
 
-#if INLINING
-using System.Runtime.CompilerServices;
-#endif
 
 namespace Osklib.Interop
 {

@@ -1,0 +1,34 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Authors>Alexei Shcherbakov</Authors>
+		<Copyright>Copyright © Alexei Shcherbakov 2018</Copyright>
+		
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
+		<DelaySign>False</DelaySign>
+
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IncludeSource>true</IncludeSource>
+		<PackageProjectUrl>https://github.com/AlexeiScherbakov/osklib</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AlexeiScherbakov/osklib</RepositoryUrl>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(TargetFramework)'=='net40'">
+		<DefineConstants>$(DefineConstants);NO_INLINING</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net471'">
+		<DefineConstants>$(DefineConstants);USE_REF_STRUCT</DefineConstants>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+		<DefineConstants>$(DefineConstants);API_SPAN;USE_REF_STRUCT</DefineConstants>
+	</PropertyGroup>
+
+</Project>

@@ -8,6 +8,6 @@ namespace Osklib.Interop
 	[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	interface IInputHostManagerBroker
 	{
-		void GetIhmLocation(ref Rect rect, out DisplayMode mode);
+		void GetIhmLocation(out Rect rect, out DisplayMode mode);
 	}
 }

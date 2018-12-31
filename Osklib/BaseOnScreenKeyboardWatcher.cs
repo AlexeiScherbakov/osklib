@@ -125,7 +125,13 @@ namespace Osklib
 			}
 			DisplayMode displayMode;
 			var ret = OnScreenKeyboardWatcherRaiseEvents.None;
-			_inputHostManagerBroker.GetIhmLocation(ref _location, out displayMode);
+			Rect location;
+			_inputHostManagerBroker.GetIhmLocation(out location, out displayMode);
+			if (!_location.Equals(location))
+			{
+				_location = location;
+				ret |= OnScreenKeyboardWatcherRaiseEvents.LocationChanged;
+			}
 			if (SetDisplayMode(displayMode))
 			{
 				ret |= OnScreenKeyboardWatcherRaiseEvents.DisplayModeChanged;

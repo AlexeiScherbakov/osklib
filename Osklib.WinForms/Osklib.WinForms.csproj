@@ -1,41 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	<PropertyGroup>
+		<TargetFrameworks>net40;net45;net47;netcoreapp3.0</TargetFrameworks>
+		<Version>1.5.0</Version>
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFrameworks>net40;net45;net47</TargetFrameworks>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
-		<PackageProjectUrl>https://github.com/AlexeiScherbakov/osklib</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/AlexeiScherbakov/osklib</RepositoryUrl>
-		<DelaySign>False</DelaySign>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<IncludeSource>true</IncludeSource>
-		<Version>1.4.0</Version>
-		<Authors>Alexei Shcherbakov</Authors>
-		<Company />
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\key.snk" Link="key.snk" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<None Include="..\key.snk" Link="key.snk" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Osklib\Osklib.csproj" />
 	</ItemGroup>
 
-
 	<ItemGroup>
-	  <Reference Include="System.Windows.Forms" />
+		<Compile Update="WinFormsKeyboardWatcher.cs">
+			<SubType>Component</SubType>
+		</Compile>
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <Compile Update="WinFormsKeyboardWatcher.cs">
-	    <SubType>Component</SubType>
-	  </Compile>
-	</ItemGroup>
-
+	<Import Project="$(SolutionDir)osklib.targets" />
 </Project>

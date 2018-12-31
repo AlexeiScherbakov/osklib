@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E15DD87A-CF9A-4292-B82F-D13F0959C3AC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		osklib.targets = osklib.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTester", "ConsoleTester\ConsoleTester.csproj", "{9752EAF3-4855-4E2D-889B-961AF3CE1F72}"
@@ -16,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSample", "WpfSample\WpfS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osklib.Wpf", "Osklib.Wpf\Osklib.Wpf.csproj", "{4B5F564E-7F6D-4E80-B2E8-2A70001A807B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osklib.WinForms", "Osklib.WinForms\Osklib.WinForms.csproj", "{77108297-D1F7-4166-AA44-BAC018BDB08A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osklib.WinForms", "Osklib.WinForms\Osklib.WinForms.csproj", "{77108297-D1F7-4166-AA44-BAC018BDB08A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsSample", "WinFormsSample\WinFormsSample.csproj", "{58D8FFFC-E497-4E4D-BF2D-985F5436F1A3}"
 EndProject

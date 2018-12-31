@@ -1,18 +1,12 @@
-#if !NET40
-#define INLINING
-#endif
 
 using System;
 using System.Runtime.InteropServices;
-
-#if INLINING
 using System.Runtime.CompilerServices;
-#endif
 
 namespace Osklib.Interop
 {
 	internal static class NativeMethods
-    {
+	{
 		#region Fuctions imports
 
 		#region [user32]
@@ -107,12 +101,14 @@ namespace Osklib.Interop
 			return ok;
 		}
 
-#if INLINING
+#if NO_INLINING
+		[MethodImpl(256)]
+#else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		internal static bool IsValidHandle(IntPtr handle)
 		{
-			// if will be eliminated by jit
+			// if (?:) will be eliminated by jit
 			return (IntPtr.Size == 4)
 				? (handle.ToInt32() > 0)
 				: (handle.ToInt64() > 0);
