@@ -28,7 +28,15 @@ namespace Osklib
 				{
 					case 10:
 						// Windows 10 (ok)
-						_oskController = new Windows10OnScreenKeyboardController();
+						if (version.Build>=16299)
+						{
+							_oskController = new NewWindows10OnScreenKeyboardController();
+						}
+						else
+						{
+							_oskController = new Windows10OnScreenKeyboardController();
+						}
+						
 						break;
 					default:
 						break;

@@ -1,15 +1,15 @@
-﻿namespace Osklib
+namespace Osklib
 {
 	public enum OnScreenKeyboardDisplayMode
 	{
 		/// <summary>
 		/// Not detected
 		/// </summary>
-		None=0,
+		None = 0,
 		/// <summary>
 		/// Unsupported
 		/// </summary>
-		NotSupported=1,
+		NotSupported = 1,
 		/// <summary>
 		/// Floating
 		/// </summary>
@@ -17,7 +17,16 @@
 		/// <summary>
 		/// Docked
 		/// </summary>
-		Docked=3,
+		Docked = 3,
 
+	}
+
+
+	public static class OnScreenKeyboardDisplayModeExtension
+	{
+		public static bool IsVisibleDisplayMode(this OnScreenKeyboardDisplayMode mode)
+		{
+			return (mode == OnScreenKeyboardDisplayMode.Docked) || (mode == OnScreenKeyboardDisplayMode.Floating);
+		}
 	}
 }

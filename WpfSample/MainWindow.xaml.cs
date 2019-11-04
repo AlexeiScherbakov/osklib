@@ -31,7 +31,6 @@ namespace WpfSample
 			InitializeComponent();
 
 			_keyBoardWatcher = new DispatcherOnScreenKeyboardWatcher(this.Dispatcher);
-			_keyBoardWatcher.TrackedEvents = OnScreenKeyboardWatcherEvents.State | OnScreenKeyboardWatcherEvents.Location;
 
 			DetectParameters();
 
@@ -51,7 +50,7 @@ namespace WpfSample
 			keyboardLocationTextBox.Text = string.Format("Keyboard position is ({0},{1}-{2},{3}), keyboard display mode is {4}, Is opened - {5}",
 					rect.Left, rect.Top, rect.Right, rect.Bottom,
 					_keyBoardWatcher.DisplayMode,
-					_keyBoardWatcher.State);
+					_keyBoardWatcher.IsOpened());
 		}
 
 

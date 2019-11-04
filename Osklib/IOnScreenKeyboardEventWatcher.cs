@@ -7,14 +7,22 @@ namespace Osklib
 	/// </summary>
 	public interface IOnScreenKeyboardEventWatcher
 	{
-		bool? State { get; }
 		DateTime? OpenedSince { get; }
 		OnScreenKeyboardDisplayMode DisplayMode { get; }
-		OnScreenKeyboardWatcherEvents TrackedEvents { get; }
 		Rect Location { get; }
 
 		event EventHandler ParametersChanged;
 		event EventHandler KeyboardOpened;
 		event EventHandler KeyboardClosed;
+	}
+
+
+	public static class OnScreenKeyboardEventWatcherExtension
+	{
+		public static bool IsOpened<TWatcher>(this TWatcher watcher)
+			where TWatcher:IOnScreenKeyboardEventWatcher
+		{
+			return watcher.DisplayMode.IsVisibleDisplayMode();
+		}
 	}
 }

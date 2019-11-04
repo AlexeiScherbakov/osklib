@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Windows.Threading;
 
 namespace Osklib.Wpf
@@ -25,6 +26,7 @@ namespace Osklib.Wpf
 		protected override void Dispose(bool disposing)
 		{
 			_timer.Stop();
+			base.Dispose(disposing);
 		}
 
 		private void TimerTick(object sender, EventArgs e)

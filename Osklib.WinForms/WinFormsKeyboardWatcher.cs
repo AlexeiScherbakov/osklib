@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
+using Osklib.Interop;
 using Osklib.WinForms.Interop;
 
 namespace Osklib.WinForms
@@ -41,11 +42,6 @@ namespace Osklib.WinForms
 		}
 		#endregion
 
-		public bool? State
-		{
-			get { return _watcher.State; }
-		}
-
 		public DateTime? OpenedSince
 		{
 			get { return _watcher.OpenedSince; }
@@ -54,11 +50,6 @@ namespace Osklib.WinForms
 		public OnScreenKeyboardDisplayMode DisplayMode
 		{
 			get { return _watcher.DisplayMode; }
-		}
-
-		public OnScreenKeyboardWatcherEvents TrackedEvents
-		{
-			get { return _watcher.TrackedEvents; }
 		}
 
 		public Rect Location
@@ -120,13 +111,8 @@ namespace Osklib.WinForms
 
 			protected override void Dispose(bool disposing)
 			{
-				var timer = Interlocked.Exchange(ref _timer, null);
-				if (timer != null)
-				{
-					timer.Stop();
-					timer.Dispose();
-				}
-
+				Disposer.Dispose(ref _timer);
+				base.Dispose();
 			}
 
 			private void TimerTick(object sender, System.EventArgs e)

@@ -7,19 +7,16 @@ namespace Osklib
 	public abstract class BaseOnScreenKeyboardWatcher
 		: IDisposable
 	{
-		private OnScreenKeyboardWatcherEvents _events;
-		private bool? _lastState;
 		private bool _closeOnTimeout;
 		private DateTime? _openedSince;
 
-		private IInputHostManagerBroker _inputHostManagerBroker;
+		private ComPtr<IInputHostManagerBroker> _inputHostManagerBroker;
 		private Rect _location;
 		private OnScreenKeyboardDisplayMode _displayMode;
 
 		#region ctor & dtor
 		protected BaseOnScreenKeyboardWatcher()
 		{
-			_events = OnScreenKeyboardWatcherEvents.State;
 			_location = new Rect();
 		}
 
@@ -34,14 +31,11 @@ namespace Osklib
 			GC.SuppressFinalize(this);
 		}
 
-		protected abstract void Dispose(bool disposing);
-		#endregion
-
-		public OnScreenKeyboardWatcherEvents TrackedEvents
+		protected virtual void Dispose(bool disposing)
 		{
-			get { return _events; }
-			set { _events = value; }
+			Disposer.Dispose(ref _inputHostManagerBroker);
 		}
+		#endregion
 
 		public OnScreenKeyboardDisplayMode DisplayMode
 		{
@@ -51,11 +45,6 @@ namespace Osklib
 		public Rect Location
 		{
 			get { return _location; }
-		}
-
-		public bool? State
-		{
-			get { return _lastState; }
 		}
 
 		public DateTime? OpenedSince
@@ -69,89 +58,110 @@ namespace Osklib
 
 			if (_inputHostManagerBroker != null)
 			{
-				Marshal.ReleaseComObject(_inputHostManagerBroker);
-				_inputHostManagerBroker = null;
+				Disposer.Dispose(ref _inputHostManagerBroker);
 			}
-
-			IImmersiveShellBroker shellBroker = null;
 			try
 			{
-				shellBroker = (IImmersiveShellBroker)Activator.CreateInstance(ComTypes.ImmersiveShellBrokerType);
-				_inputHostManagerBroker = shellBroker.GetInputHostManagerBroker();
-				ret = _inputHostManagerBroker != null;
-			}
-			finally
-			{
-				if (!ReferenceEquals(shellBroker, null))
+				using (var shellBroker = ComPtr<IImmersiveShellBroker>.Create(ComTypes.ImmersiveShellBrokerType))
 				{
-					Marshal.ReleaseComObject(shellBroker);
+					_inputHostManagerBroker = new ComPtr<IInputHostManagerBroker>(shellBroker.Instance.GetInputHostManagerBroker());
+					ret = _inputHostManagerBroker != null;
 				}
+			}
+			catch(Exception e)
+			{
+
 			}
 			return ret;
 		}
 
-		private bool SetDisplayMode(DisplayMode displayMode)
+		private OnScreenKeyboardWatcherRaiseEvents SetDisplayMode(DisplayMode displayMode)
 		{
-			OnScreenKeyboardDisplayMode setValue = OnScreenKeyboardDisplayMode.None;
-			switch (displayMode)
+			// обработка первой установки
+			var setDisplayMode = displayMode.ToPublicDisplayMode();
+			if (_displayMode == OnScreenKeyboardDisplayMode.None)
 			{
-				case Interop.DisplayMode.NotSupported:
-					setValue = OnScreenKeyboardDisplayMode.NotSupported;
-					break;
-				case Interop.DisplayMode.Floating:
-					setValue = OnScreenKeyboardDisplayMode.Floating;
-					break;
-				case Interop.DisplayMode.Docked:
-					setValue = OnScreenKeyboardDisplayMode.Docked;
-					break;
+				_displayMode = setDisplayMode;
+				return OnScreenKeyboardWatcherRaiseEvents.None;
 			}
-			if (_displayMode != setValue)
-			{
-				_displayMode = setValue;
-				return true;
-			}
-			return false;
-		}
 
-		private OnScreenKeyboardWatcherRaiseEvents GetLocation()
-		{ 
-			if (ReferenceEquals(_inputHostManagerBroker, null))
+			if (_displayMode == setDisplayMode)
 			{
-				if (!GetInputHostManagerBroker())
+				// ничего не изменилось
+				return OnScreenKeyboardWatcherRaiseEvents.None;
+			}
+
+			
+
+			var ret = OnScreenKeyboardWatcherRaiseEvents.DisplayModeChanged;
+			var oldStateVisible = (_displayMode == OnScreenKeyboardDisplayMode.Floating) || (_displayMode == OnScreenKeyboardDisplayMode.Docked);
+			var newStateVisible = (setDisplayMode == OnScreenKeyboardDisplayMode.Floating) || (setDisplayMode == OnScreenKeyboardDisplayMode.Docked);
+
+			if (oldStateVisible ^ newStateVisible)
+			{
+				// поменялась видимость
+				if (newStateVisible)
 				{
-					// cannot detect
-					return OnScreenKeyboardWatcherRaiseEvents.None;
+					ret |= OnScreenKeyboardWatcherRaiseEvents.KeyboardOpened;
+				}
+				else
+				{
+					ret |= OnScreenKeyboardWatcherRaiseEvents.KeyboardClosed;
 				}
 			}
-			DisplayMode displayMode;
-			var ret = OnScreenKeyboardWatcherRaiseEvents.None;
-			Rect location;
-			_inputHostManagerBroker.GetIhmLocation(out location, out displayMode);
-			if (!_location.Equals(location))
+
+			if (newStateVisible)
 			{
-				_location = location;
-				ret |= OnScreenKeyboardWatcherRaiseEvents.LocationChanged;
+				if (!_openedSince.HasValue)
+				{
+					_openedSince = DateTime.Now;
+				}
 			}
-			if (SetDisplayMode(displayMode))
+			else
 			{
-				ret |= OnScreenKeyboardWatcherRaiseEvents.DisplayModeChanged;
+				_openedSince = null;
 			}
+			_displayMode = setDisplayMode;
 			return ret;
 		}
+
 
 		protected void CheckKeyboard()
 		{
-			// checking
+			DisplayMode displayMode = Interop.DisplayMode.NotSupported;
 			var raiseEvents = OnScreenKeyboardWatcherRaiseEvents.None;
-			if (_events.HasFlag(OnScreenKeyboardWatcherEvents.Location))
+			Rect location = default;
+	
+			int retry = 1;
+			do
 			{
-				raiseEvents|=GetLocation();
-			}
-			if (_events.HasFlag(OnScreenKeyboardWatcherEvents.State))
+				if (ReferenceEquals(_inputHostManagerBroker, null))
+				{
+					if (!GetInputHostManagerBroker())
+					{
+						// cannot detect
+						return;
+					}
+				}
+				try
+				{
+					_inputHostManagerBroker.Instance.GetIhmLocation(out location, out displayMode);
+					retry = -1;
+				}
+				catch (Exception e)
+				{
+					retry--;
+					Disposer.Dispose(ref _inputHostManagerBroker);
+				}
+			} while (retry >= 0);
+
+			if (!_location.Equals(location))
 			{
-				IntPtr wnd = NativeMethods.FindTextInputWindow();
-				raiseEvents|=SetState(NativeMethods.IsValidHandle(wnd));
+				_location = location;
+				raiseEvents |= OnScreenKeyboardWatcherRaiseEvents.LocationChanged;
 			}
+			raiseEvents |= SetDisplayMode(displayMode);
+
 			// raising events
 			if (raiseEvents== OnScreenKeyboardWatcherRaiseEvents.None)
 			{
@@ -170,61 +180,6 @@ namespace Osklib
 			{
 				OnKeyboardClosed();
 			}
-		}
-
-		/// <summary>
-		/// Sets field <paramref name="field"/> to <paramref name="value"/>
-		/// </summary>
-		/// <param name="field"></param>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		private static bool? SetTriStatePropertyValue(ref bool? field,bool value)
-		{
-			if (field.HasValue)
-			{
-				if (field.Value != value)
-				{
-					field = value;
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				field = value;
-				return null;
-			}
-		}
-
-		private OnScreenKeyboardWatcherRaiseEvents SetState(bool state)
-		{
-			switch(SetTriStatePropertyValue(ref _lastState, state))
-			{
-				case true:
-					if (state)
-					{
-						_openedSince = DateTime.Now;
-						//keyboard is shown
-						return OnScreenKeyboardWatcherRaiseEvents.KeyboardOpened;
-					}
-					else
-					{
-						_openedSince = null;
-						//keyboard is hidden
-						return OnScreenKeyboardWatcherRaiseEvents.KeyboardClosed;
-					}
-					break;
-				case false:
-					if (!state)
-					{
-						_openedSince = null;
-					}
-					break;
-			}
-			return OnScreenKeyboardWatcherRaiseEvents.None;
 		}
 
 		protected abstract void OnParametersChanged();
