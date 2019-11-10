@@ -4,7 +4,7 @@
 		<TargetFrameworks>net40;net45;net47;net471;netcoreapp3.0</TargetFrameworks>
 		<Description>Library for controlling Windows 10 On Screen Keyboard</Description>
 		<PackageTags>osk, OnScreenKeyboard, TabTip</PackageTags>
-		<Version>1.5.0</Version>
+		<Version>1.6.0</Version>
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
