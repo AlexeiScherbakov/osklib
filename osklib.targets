@@ -26,8 +26,12 @@
 	<PropertyGroup Condition="'$(TargetFramework)'=='net471'">
 		<DefineConstants>$(DefineConstants);USE_REF_STRUCT</DefineConstants>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+		<DefineConstants>$(DefineConstants);USE_REF_STRUCT</DefineConstants>
+	</PropertyGroup>
 	
-	<PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+	<PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
 		<DefineConstants>$(DefineConstants);API_SPAN;USE_REF_STRUCT</DefineConstants>
 	</PropertyGroup>
 

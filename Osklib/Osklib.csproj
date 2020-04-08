@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net40;net45;net47;net471;netcoreapp3.0</TargetFrameworks>
+		<TargetFrameworks>net40;net45;net47;net471;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
 		<Description>Library for controlling Windows 10 On Screen Keyboard</Description>
 		<PackageTags>osk, OnScreenKeyboard, TabTip</PackageTags>
-		<Version>1.6.0</Version>
+		<Version>1.7.0-beta.1</Version>
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

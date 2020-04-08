@@ -6,13 +6,13 @@ using Osklib.Interop;
 
 namespace Osklib
 {
-	internal sealed class NewWindows10OnScreenKeyboardController
+	internal sealed class ComOnScreenKeyboardController
 		: OnScreenKeyboardController
 	{
 		private ComPtr<IInputHostManagerBroker> _inputHostManagerBroker;
 
 
-		public NewWindows10OnScreenKeyboardController()
+		public ComOnScreenKeyboardController()
 		{
 			CreateInputHostManagerBroker();
 		}
@@ -28,12 +28,9 @@ namespace Osklib
 
 		public override bool Close()
 		{
-			// find it
-			IntPtr handle = NativeMethods.FindWindow("IPTIP_Main_Window", "");
-			if (NativeMethods.IsValidHandle(handle))
+			if (IsOpened())
 			{
-				// don't check style - just close
-				NativeMethods.SendMessage(handle, NativeMethods.WM_SYSCOMMAND, NativeMethods.SC_CLOSE, 0);
+				ToggleByCom();
 				return true;
 			}
 			return false;
@@ -41,19 +38,13 @@ namespace Osklib
 
 		public override bool IsOpened()
 		{
-			IntPtr handle = NativeMethods.FindWindow("IPTIP_Main_Window", "");
-			if (!NativeMethods.IsValidHandle(handle))
-			{
-				// COM Server is inactive
-				return false;
-			}
 			bool error = false;
 			DisplayMode displayMode = default;
 			try
 			{
 				_inputHostManagerBroker.Instance.GetIhmLocation(out var ret, out displayMode);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				CreateInputHostManagerBroker();
 				error = true;
@@ -62,7 +53,7 @@ namespace Osklib
 			{
 				_inputHostManagerBroker.Instance.GetIhmLocation(out var ret, out displayMode);
 			}
-			
+
 			return (displayMode == DisplayMode.Docked) || (displayMode == DisplayMode.Floating);
 
 		}
@@ -71,7 +62,7 @@ namespace Osklib
 		{
 			ProcessStartInfo psi = new ProcessStartInfo(@"C:\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe")
 			{
-				UseShellExecute=true
+				UseShellExecute = true
 			};
 
 			var p = Process.Start(psi);
@@ -82,7 +73,7 @@ namespace Osklib
 			}
 		}
 
-		private static void ShowByCom()
+		private static void ToggleByCom()
 		{
 			try
 			{
@@ -92,7 +83,7 @@ namespace Osklib
 					tipInvocation.Instance.Toggle(NativeMethods.GetDesktopWindow());
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 
 			}
@@ -105,7 +96,7 @@ namespace Osklib
 			{
 				if (!IsOpened())
 				{
-					ShowByCom();
+					ToggleByCom();
 				}
 			}
 			else
@@ -114,7 +105,7 @@ namespace Osklib
 				// on some devices starting TabTip don't show keyboard, on some does  ¯\_(ツ)_/¯
 				if (!IsOpened())
 				{
-					ShowByCom();
+					ToggleByCom();
 				}
 			}
 		}

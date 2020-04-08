@@ -12,7 +12,7 @@
 
 #endif
 
-#if NET471 || NETCOREAPP3_0
+#if NET471 || NETSTANDARD2_1 || NETCOREAPP3_1
 
 #if !USE_REF_STRUCT
 #error USE_REF_STRUCT must be defined

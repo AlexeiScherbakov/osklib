@@ -5,13 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Osklib;
 using Osklib.Wpf;
@@ -19,14 +17,13 @@ using Osklib.Wpf;
 namespace WpfSample
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for StyleNoneWindow.xaml
 	/// </summary>
-	public partial class MainWindow
-		: Window
+	public partial class StyleNoneWindow : Window
 	{
 		private DispatcherOnScreenKeyboardWatcher _keyBoardWatcher;
 
-		public MainWindow()
+		public StyleNoneWindow()
 		{
 			InitializeComponent();
 
@@ -69,13 +66,6 @@ namespace WpfSample
 			OnScreenKeyboardSettings.EnableForTextBoxes = textBoxToggle.IsChecked == true;
 			OnScreenKeyboardSettings.EnableForPasswordBoxes = passwordBoxToggle.IsChecked == true;
 			OnScreenKeyboardSettings.EnableForRichTextBoxes = richBoxToggle.IsChecked == true;
-		}
-
-		private void MenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			StyleNoneWindow wnd = new StyleNoneWindow();
-			wnd.Owner = this;
-			wnd.Show();
 		}
 	}
 }

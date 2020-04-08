@@ -36,7 +36,12 @@ namespace Osklib
 
 		private static void StartTabTip()
 		{
-			var p = Process.Start(@"C:\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe");
+			ProcessStartInfo psi = new ProcessStartInfo(@"C:\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe")
+			{
+				UseShellExecute = true
+			};
+
+			var p = Process.Start(psi);
 			IntPtr handle;
 			while (!NativeMethods.IsValidHandle(handle = NativeMethods.FindWindow("IPTIP_Main_Window", "")))
 			{
