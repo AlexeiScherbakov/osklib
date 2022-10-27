@@ -36,9 +36,11 @@ namespace Osklib
 
 		private static void StartTabTip()
 		{
-			ProcessStartInfo psi = new ProcessStartInfo(@"C:\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe")
+			ProcessStartInfo psi = new ProcessStartInfo(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe"))
 			{
-				UseShellExecute = true
+				CreateNoWindow = true,
+				UseShellExecute = false,
+				Arguments = "/c \"C:\\Program Files\\Common Files\\microsoft shared\\ink\\TabTip.exe\""
 			};
 
 			var p = Process.Start(psi);
