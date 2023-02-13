@@ -82,7 +82,7 @@ namespace Osklib
 			}
 		}
 
-		private static void ShowByCom()
+		private static void ToggleByCom()
 		{
 			try
 			{
@@ -105,16 +105,17 @@ namespace Osklib
 			{
 				if (!IsOpened())
 				{
-					ShowByCom();
+					ToggleByCom();
 				}
 			}
 			else
 			{
 				StartTabTip();
 				// on some devices starting TabTip don't show keyboard, on some does  ¯\_(ツ)_/¯
+				Thread.Sleep(1000);	
 				if (!IsOpened())
 				{
-					ShowByCom();
+					ToggleByCom();
 				}
 			}
 		}

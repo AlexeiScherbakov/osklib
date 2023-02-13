@@ -77,5 +77,15 @@ namespace WpfSample
 			wnd.Owner = this;
 			wnd.Show();
 		}
+
+		private void Show(object sender, RoutedEventArgs e)
+		{
+			OnScreenKeyboard.Show();
+		}
+
+		private void Hide(object sender, RoutedEventArgs e)
+		{
+			OnScreenKeyboard.Close();
+		}
 	}
 }

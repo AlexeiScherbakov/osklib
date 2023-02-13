@@ -49,13 +49,12 @@ namespace Osklib
 			}
 		}
 
-		private static void ShowByCom()
+		private static void ToggleByCom()
 		{
 			ITipInvocation instance = null;
 			try
 			{
 				instance = (ITipInvocation)Activator.CreateInstance(ComTypes.TipInvocationType);
-				var window = NativeMethods.GetDesktopWindow();
 				instance.Toggle(NativeMethods.GetDesktopWindow());
 			}
 			finally
@@ -75,16 +74,17 @@ namespace Osklib
 				//Console.WriteLine( "Style {0:X8}", style );
 				if (!NativeMethods.IsWin10OnScreenKeyboardVisible())
 				{
-					ShowByCom();
+					ToggleByCom();
 				}
 			}
 			else
 			{
 				StartTabTip();
 				// on some devices starting TabTip don't show keyboard, on some does  ¯\_(ツ)_/¯
+				Thread.Sleep(1000);
 				if (!IsOpened())
 				{
-					ShowByCom();
+					ToggleByCom();
 				}
 			}
 		}
