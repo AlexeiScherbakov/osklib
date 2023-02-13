@@ -103,6 +103,7 @@ namespace Osklib
 			{
 				StartTabTip();
 				// on some devices starting TabTip don't show keyboard, on some does  ¯\_(ツ)_/¯
+				Thread.Sleep(1000);
 				if (!IsOpened())
 				{
 					ToggleByCom();
