@@ -25,6 +25,8 @@
 					<CheckBox Margin="0,5,0,5" x:Name="richBoxToggle" Content="RichTextBox" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Checked"/>
 					<CheckBox Margin="0,5,0,5" x:Name="passwordBoxToggle" Content="PasswordBox" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Checked"/>
 					<TextBlock Text="Warning: DatePickerTextBox has TextBox as parent!" TextWrapping="Wrap"/>
+					<Button Content="Show Keyboard" Click="Show"></Button>
+					<Button Content="Hide Keyboard" Click="Hide"></Button>
 				</StackPanel>
 			</GroupBox>
 			<GroupBox Grid.Column="1" Header="Text boxes">
